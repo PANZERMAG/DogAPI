@@ -5,6 +5,7 @@ import uuid
 from typing import List
 
 from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from controllers.controller import get_pets_db, create_lost_pet, get_posts_db, create_post_db, delete_post, create_user, \
@@ -14,6 +15,16 @@ from models.database import get_db
 from models.schemes import Pet, PetCreate, Post, PostCreate, UserCreate, User
 
 router = APIRouter()
+
+
+@router.get("/photos/{photo_filename}")
+async def get_photo(photo_filename: str):
+    path = os.path.abspath('../src/img')
+    photo_path = os.path.join(path, photo_filename)
+    if os.path.exists(photo_path):
+        return FileResponse(photo_path)
+    else:
+        return {"error": "Фотография не найдена"}
 
 
 @router.get("/get_pets/", response_model=List[schemes.Pet])
@@ -53,7 +64,7 @@ def upload_photo(photo_file: UploadFile = File(...)):
     with open(abs_path, 'wb') as file_photo:
         shutil.copyfileobj(photo_file.file, file_photo)
 
-    return {"path file": str(abs_path)}
+    return {"path file": str(filename)}
 
 
 @router.post('/create_user/', )
