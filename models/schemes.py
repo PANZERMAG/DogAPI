@@ -35,7 +35,6 @@ class PostCreate(PostBase):
 class Post(PostBase):
     id: int
     pet_id: int
-    title: str
     photo: str
     publish_on: str
     type_post: str

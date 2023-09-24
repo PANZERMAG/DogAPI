@@ -36,7 +36,6 @@ def create_post_db(item: PostCreate, db: Session):
     return {
         "id": db_item.id,
         "pet_id": db_item.pet_id,
-        "title": db_item.title,
         "photo": db_item.photo,
         "publish_on": db_item.publish_on,
         "type_post": db_item.type_post

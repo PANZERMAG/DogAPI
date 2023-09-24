@@ -22,7 +22,6 @@ class Post(FindPetsBD):
     __tablename__ = "post"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=True)
     desc = Column(String, nullable=True)
     location = Column(String, nullable=True)
     publish_on = Column(String)
