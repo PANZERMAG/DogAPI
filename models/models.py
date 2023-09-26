@@ -8,7 +8,6 @@ class Pet(FindPetsBD):
     __tablename__ = "pet"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True, nullable=False)
     breed = Column(String, nullable=True)
     chip_number = Column(Integer, nullable=True)
     sex = Column(String, nullable=True)
@@ -22,6 +21,7 @@ class Post(FindPetsBD):
     __tablename__ = "post"
 
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
     desc = Column(String, nullable=True)
     location = Column(String, nullable=True)
     publish_on = Column(String)
