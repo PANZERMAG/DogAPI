@@ -24,7 +24,6 @@ def create_lost_pet(item: PetCreate, db: Session):
 
     return {
         "id": db_item.id,
-        "name": db_item.name
     }
 
 

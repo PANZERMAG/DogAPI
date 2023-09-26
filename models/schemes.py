@@ -19,11 +19,11 @@ class Pet(PetBase):
 
 # ------Post models
 class PostBase(BaseModel):
-    name: str
     pet_id: int
 
 
 class PostCreate(PostBase):
+    name: str
     type_post: str
     desc: str
     location: str
