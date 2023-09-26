@@ -24,7 +24,7 @@ async def get_photo(photo_filename: str):
     if os.path.exists(photo_path):
         return FileResponse(photo_path)
     else:
-        return {"error": "Фотография не найдена"}
+        return {"error": "Photo not found"}
 
 
 @router.get("/get_pets/", response_model=List[schemes.Pet])
