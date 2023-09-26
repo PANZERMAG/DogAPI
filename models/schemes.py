@@ -3,12 +3,11 @@ from pydantic import BaseModel
 
 # ----Pet models
 class PetBase(BaseModel):
-    name: str
+    breed: str
 
 
 class PetCreate(PetBase):
-    breed: str
-
+    ...
 
 class Pet(PetBase):
     id: int
@@ -20,6 +19,7 @@ class Pet(PetBase):
 
 # ------Post models
 class PostBase(BaseModel):
+    name: str
     pet_id: int
 
 

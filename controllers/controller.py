@@ -64,7 +64,7 @@ def create_user(item: UserCreate, db: Session):
     db.commit()
 
     return {
-        "status": "Account has beem successfull created"
+        "status": True
     }
 
 
@@ -73,8 +73,8 @@ def verif_user(item: User, db: Session):
 
     if db_item:
         return {
-            "Response": "User true"
+            "Response": True
         }
     return {
-        "Response": "User not true"
+        "Response": False
     }
