@@ -7,10 +7,21 @@ class PetBase(BaseModel):
 
 
 class PetCreate(PetBase):
-    ...
+    breed: str
+    chip_number: str
+    pet_color: str
+    age: int
+    tatoo_number: str
+    weight: float
+
 
 class Pet(PetBase):
     id: int
+    chip_number: str
+    pet_color: str
+    age: int
+    tatoo_number: str
+    weight: float
 
     class Config:
         orm_mode = True
@@ -32,11 +43,13 @@ class PostCreate(PostBase):
 
 
 class Post(PostBase):
+    name: str
     id: int
     pet_id: int
     photo: str
     publish_on: str
     type_post: str
+    location: str
 
     class Config:
         orm_mode = True

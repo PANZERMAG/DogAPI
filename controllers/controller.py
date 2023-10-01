@@ -1,14 +1,20 @@
 import os
+import uuid
 
 from sqlalchemy.orm import Session
 
 from models import models
-from models.models import Pet, Post, User
+from models.models import Pet, Post, User, AccessKey
 from models.schemes import PetCreate, PostCreate, UserCreate
 
 
 def get_pets_db(db: Session):
     return db.query(models.Pet).all()
+
+def get_pet_db(pet_id, db: Session):
+    pet = db.query(models.Pet).filter(Pet.id == pet_id).first()
+    return pet
+
 
 
 def get_posts_db(type_post: str, db: Session):
@@ -22,9 +28,7 @@ def create_lost_pet(item: PetCreate, db: Session):
     db.add(db_item)
     db.commit()
 
-    return {
-        "id": db_item.id,
-    }
+    return db_item
 
 
 def create_post_db(item: PostCreate, db: Session):
@@ -32,13 +36,7 @@ def create_post_db(item: PostCreate, db: Session):
     db.add(db_item)
     db.commit()
 
-    return {
-        "id": db_item.id,
-        "pet_id": db_item.pet_id,
-        "photo": db_item.photo,
-        "publish_on": db_item.publish_on,
-        "type_post": db_item.type_post
-    }
+    return db_item
 
 
 def delete_post(item_id: int, db: Session):
@@ -58,12 +56,19 @@ def delete_post(item_id: int, db: Session):
 
 
 def create_user(item: UserCreate, db: Session):
+
     db_item = User(**item.dict())
+
+    db_key = AccessKey(key=str(uuid.uuid4()))
+
+
     db.add(db_item)
+    db.add(db_key)
     db.commit()
 
     return {
-        "status": True
+        "status": True,
+        "key": db_key.key
     }
 
 

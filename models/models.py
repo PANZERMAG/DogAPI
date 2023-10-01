@@ -40,3 +40,9 @@ class User(FindPetsBD):
     email = Column(String, unique=True, nullable=True)
     posts = Column(String)
     password = Column(String)
+
+class AccessKey(FindPetsBD):
+    __tablename__ = "access_key"
+
+    id = Column(Integer, primary_key=True, index=True)
+    key = Column(String)

@@ -9,7 +9,8 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from controllers.controller import get_pets_db, create_lost_pet, get_posts_db, create_post_db, delete_post, create_user, \
-    verif_user
+    verif_user, get_pet_db
+from dependencies import dependencies
 from models import schemes
 from models.database import get_db
 from models.schemes import Pet, PetCreate, Post, PostCreate, UserCreate, User
@@ -33,26 +34,34 @@ def get_all_pets(db: Session = Depends(get_db)):
     return pets
 
 
+@router.get("/get_pet/", response_model=Pet)
+def get_pet(pet_id: int, db: Session = Depends(get_db)):
+    pet = get_pet_db(pet_id, db)
+    return pet
+
+
 @router.get('/get_posts/', response_model=List[schemes.Post])
-def get_posts(type_post: str, db: Session = Depends(get_db)):
-    print(1)
-    print(type_post)
+def get_posts(type_post: str, db: Session = Depends(get_db),
+              current_user: str = Depends(dependencies.get_current_user)):
     posts = get_posts_db(type_post, db)
     return posts
 
 
 @router.post('/lost_pet/', response_model=Pet)
-def lost_pet(item: PetCreate, db: Session = Depends(get_db)):
+def lost_pet(item: PetCreate, db: Session = Depends(get_db),
+             current_user: str = Depends(dependencies.get_current_user)):
     return create_lost_pet(item=item, db=db)
 
 
 @router.post('/create_post/', response_model=Post)
-def create_post(item: PostCreate, db: Session = Depends(get_db)):
+def create_post(item: PostCreate, db: Session = Depends(get_db),
+                current_user: str = Depends(dependencies.get_current_user)):
     return create_post_db(item=item, db=db)
 
 
 @router.post('/upload_photo/')
-def upload_photo(photo_file: UploadFile = File(...)):
+def upload_photo(photo_file: UploadFile = File(...),
+                 current_user: str = Depends(dependencies.get_current_user)):
     type_file = mimetypes.guess_extension(photo_file.content_type)
 
     path_folder = os.path.abspath("src/img/")
@@ -73,10 +82,16 @@ def create_user_route(item: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post('/login_user/')
-def login_user_route(item: User, db: Session = Depends(get_db)):
-    return verif_user(item, db)
+def login_user_route(item: User, db: Session = Depends(get_db),
+                     current_user: str = Depends(dependencies.get_current_user)):
+    user = verif_user(item, db)
+
+    if user:
+        user["key"] = current_user
+    return user
 
 
 @router.delete("/delete_post/")
-def delete_post_route(item_id: int, db: Session = Depends(get_db)):
+def delete_post_route(item_id: int, db: Session = Depends(get_db),
+                      current_user: str = Depends(dependencies.get_current_user)):
     return delete_post(item_id, db)
